@@ -42,7 +42,7 @@ public class LocalizacaoService {
             char bloco = salaNormalizada.charAt(0);
             char andar = salaNormalizada.charAt(1);
 
-            return new LocalizacaoDTO("Bloco" + bloco, andar + "° Andar");
+            return new LocalizacaoDTO("Bloco " + bloco, andar + "° Andar");
         }
 
         return new LocalizacaoDTO("Local não mapeado", null);
