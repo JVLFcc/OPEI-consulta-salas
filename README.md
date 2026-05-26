@@ -28,7 +28,44 @@ Principais responsabilidades:
 
 ## Frontend
 
-O frontend será desenvolvido com React, com foco em celulares.
+O frontend do sistema foi desenvolvido com **React + Vite**, com foco em uma experiência **mobile-first**, considerando que a maioria dos participantes acessará o site pelo celular após escanear um QR Code nos locais de prova.
+
+A interface foi pensada para ser simples, direta e alinhada à identidade visual da OPEI. O usuário informa seu nome ou CPF em um campo de busca, recebe sugestões em tempo real e, ao selecionar seu nome, visualiza um card com as principais informações da prova.
+
+### Principais características
+
+- Interface responsiva, priorizando o uso em smartphones.
+- Campo de busca por nome ou CPF.
+- Autocomplete com sugestões de alunos.
+- Exibição de CPF mascarado para preservar a privacidade.
+- Card de resultado com destaque visual para a sala.
+- Exibição de bloco, andar, modalidade, polo e handle, quando disponível.
+- Uso da identidade visual da OPEI, incluindo:
+  - logo oficial;
+  - tipografia Sora;
+  - cores institucionais da marca;
+  - detalhes visuais inspirados no material gráfico da edição.
+
+
+### Tecnologias utilizadas no frontend
+
+- React
+- Vite
+- JavaScript
+- CSS
+- React Icons
+
+### Identidade visual
+
+A interface utiliza elementos visuais inspirados no site e nos materiais oficiais da OPEI, como a paleta de cores da marca:
+
+- Azul: `#15A6D5`
+- Verde: `#42AF65`
+- Amarelo: `#FFAD00`
+- Vermelho: `#E6243D`
+- Preto do rodapé: `#212121`
+
+Além disso, o layout utiliza a fonte **Sora**, mantendo proximidade com a comunicação visual da olimpíada.
 
 ## Observação sobre dados sensíveis
 
