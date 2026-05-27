@@ -128,7 +128,10 @@ function App() {
                 <li key={aluno.id}>
                   <button type="button" onClick={() => selecionarAluno(aluno.id)}>
                     <strong>{aluno.nomeCompleto}</strong>
-                    <span>CPF: {aluno.cpfMascarado}</span>
+                    <span>
+                      CPF: {aluno.cpfMascarado}
+                      {aluno.dataNascimento && ` . Nasc.: ${aluno.dataNascimento}`}
+                    </span>
                   </button>
                 </li>
               ))}
@@ -147,50 +150,105 @@ function App() {
 
             <div className="student-info">
               <h2>{alunoSelecionado.nomeCompleto}</h2>
-              <p>CPF: {alunoSelecionado.cpfMascarado}</p>
+
+              <p>
+                CPF: {alunoSelecionado.cpfMascarado}
+                {alunoSelecionado.dataNascimento && 
+                ` . Nasc.: ${alunoSelecionado.dataNascimento}`}
+                </p>
+
+                {alunoSelecionado.instituicao && (
+                  <p className="student-school">{alunoSelecionado.instituicao}</p>
+                )}
             </div>
+
+            <div className="allocations-list">
+  {alunoSelecionado.alocacoes?.map((alocacao, index) => (
+    <section className="allocation-card" key={index}>
+      <div className="allocation-header">
+        <span>Modalidade</span>
+        <strong>{alocacao.modalidade}</strong>
+      </div>
 
             <div className="room-box">
               <span>Sala</span>
-              <strong>{alunoSelecionado.sala}</strong>
+              <strong>{alocacao.sala}</strong>
             </div>
 
             <div className="location">
-              <strong>{alunoSelecionado.bloco}</strong>
+              <strong>{alocacao.bloco}</strong>
 
-              {alunoSelecionado.andar && (
+              {alocacao.andar && (
                 <>
                   <span>•</span>
-                  <strong>{alunoSelecionado.andar}</strong>
+                  <strong>{alocacao.andar}</strong>
                 </>
               )}
             </div>
 
             <div className="details">
               <div>
-                <span>Modalidade</span>
-                <strong>{alunoSelecionado.modalidade}</strong>
-              </div>
-
-              <div>
                 <span>Polo</span>
-                <strong>{alunoSelecionado.polo}</strong>
+                <strong>{alocacao.polo}</strong>
               </div>
 
-              {alunoSelecionado.handle && (
+              {alocacao.handle && (
                 <div>
                   <span>Handle</span>
-                  <strong>{alunoSelecionado.handle}</strong>
+                  <strong>{alocacao.handle}</strong>
                 </div>
               )}
             </div>
           </section>
+        ))}
+      </div>
+          </section>
         )}
       </section>
 
+      <section className="realization-section">
+        <h2>Realização</h2>
+
+        <div className="realization-logos">
+          <img
+            src="/pet-primary-signature-light 1.svg"
+            alt="PET Informática"
+            className="realization-logo pet-logo"
+          />
+
+          <img
+            src="/logo-cin-removebg-preview 1.svg"
+            alt="Centro de Informática da UFPE"
+            className="realization-logo cin-logo"
+          />
+
+          <img
+            src="/ufpe-logo-removebg-preview 1.svg"
+            alt="Universidade Federal de Pernambuco"
+            className="realization-logo ufpe-logo"
+          />
+        </div>
+      </section>
+
       <footer className="footer">
-        <strong>OPEI</strong>
-        <span>Olimpíada Pernambucana de Informática</span>
+        <div className="footer-content">
+          <div className="footer-column">
+            <strong>OPEI</strong>
+            <span>Olimpíada Pernambucana de Informática</span>
+          </div>
+
+          <div className="footer-column">
+            <strong>Contato</strong>
+            <span>Av. Jorn. Aníbal Fernandes - Cidade Universitária, Recife - PE, 50740-560</span>
+            <span>opei@cin.ufpe.br</span>
+          </div>
+
+          <div className="footer-column">
+            <strong>Informações</strong>
+            <span>Consulta de salas para participantes da OPEI.</span>
+            <span>© 2026 OPEI. Todos os direitos reservados.</span>
+          </div>
+        </div>
       </footer>
     </main>
   );
