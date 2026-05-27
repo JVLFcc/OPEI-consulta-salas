@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  *
  * fiz apenas pra testar durante o desenvolvimento pra ver se tá tudo ok e tals rsrs
  */
-@Component
+//@Component
 public class DataLoader implements CommandLineRunner {
 
     private final AlunoRepository alunoRepository;
@@ -22,21 +22,12 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
         alunoRepository.save(new Aluno(
-                "Arthur Santos de Lima",
-                "arthur.lima@email.com",
-                "12345678900",
-                "12345678900",
-                "Teórica Médio",
-                null,
-                "Recife",
-                "E112"
-        ));
-
-        alunoRepository.save(new Aluno(
                 "Arthur Santos da Silva",
-                "arthur.silva@email.com",
+                "arthur@email.com",
                 "98765432100",
                 "98765432100",
+                "10/05/2008",
+                "Escola Exemplo Recife",
                 "Teórica Médio",
                 null,
                 "Recife",
@@ -44,14 +35,29 @@ public class DataLoader implements CommandLineRunner {
         ));
 
         alunoRepository.save(new Aluno(
+                "Arthur Santos da Silva",
+                "arthur@email.com",
+                "98765432100",
+                "98765432100",
+                "10/05/2008",
+                "Escola Exemplo Recife",
+                "Prática Sênior",
+                "sabrina_lover_123",
+                "Recife",
+                "G5"
+        ));
+
+        alunoRepository.save(new Aluno(
                 "Maria Clara Souza",
                 "maria@email.com",
                 "11122233344",
                 "11122233344",
+                "22/09/2009",
+                "Escola Exemplo Caruaru",
                 "Prática Júnior",
-                "maria_clara",
-                "Recife",
-                "GRAD 2"
+                "filha_de_Kanye",
+                "Caruaru",
+                "Espaço Maker"
         ));
 
         alunoRepository.save(new Aluno(
@@ -59,10 +65,25 @@ public class DataLoader implements CommandLineRunner {
                 "lucas@email.com",
                 "55566677788",
                 "55566677788",
-                "Prática Sênior",
-                "lucas_h",
-                "Recife",
-                "Espaço Maker"
+                "03/02/2007",
+                "Escola Exemplo Palmares",
+                "Teórica Médio",
+                null,
+                "Palmares",
+                "Sala 3"
+        ));
+
+        alunoRepository.save(new Aluno(
+                "Ana Beatriz Lima",
+                "ana@email.com",
+                "22233344455",
+                "22233344455",
+                "15/08/2008",
+                "Escola Exemplo Petrolina",
+                "Teórica Médio",
+                null,
+                "Petrolina",
+                "Sala 16"
         ));
     }
 }
