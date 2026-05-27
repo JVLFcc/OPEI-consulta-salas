@@ -44,7 +44,7 @@ public class AlunoService {
 
         List<Aluno> alunos;
 
-        if (termoLimpo.matches("\\d+")) {
+        if (pareceCpf(termoLimpo, apenasNumeros)) {
             alunos = alunoRepository.findTop20ByCpfNormalizadoContaining(apenasNumeros);
         } else {
             alunos = alunoRepository.findTop20ByNomeCompletoContainingIgnoreCase(termoLimpo);
@@ -127,6 +127,19 @@ public class AlunoService {
         }
 
         return alunosPorCpf.values().stream().toList();
+    }
+
+    /**
+     * vê se o termo digitado é realmente cpf, como o nome já diz
+     *
+     * ele vê tanto xxxxxxxxxxx quanto xxx.xxx.xxx-xx (além das buscas parciais, é claro)
+     */
+    private boolean pareceCpf(String termoOriginal, String apenasNumeros) {
+        if (apenasNumeros.isBlank()) {
+            return false;
+        }
+
+        return termoOriginal.matches("[0-9.\\-\\s]+");
     }
 
     /**
