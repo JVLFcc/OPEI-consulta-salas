@@ -100,13 +100,13 @@ public class LocalizacaoService {
         if (modalidade.contains("PRATICA")) {
             return new LocalizacaoDTO(
                     "Lab 9",
-                    null,
+                    "Não informado",
                     "Térreo");
         }
 
         return new LocalizacaoDTO(
                 formatarSalaPalmares(sala),
-                null,
+                "Não informado",
                 "Térreo");
     }
 
