@@ -23,6 +23,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) {
         alunoRepository.save(new Aluno(
                 "Arthur Santos da Silva",
+                "ARTHUR SANTOS DA SILVA",
                 "arthur@email.com",
                 "98765432100",
                 "98765432100",
@@ -36,6 +37,7 @@ public class DataLoader implements CommandLineRunner {
 
         alunoRepository.save(new Aluno(
                 "Arthur Santos da Silva",
+                "ARTHUR SANTOS DA SILVA",
                 "arthur@email.com",
                 "98765432100",
                 "98765432100",
@@ -49,6 +51,7 @@ public class DataLoader implements CommandLineRunner {
 
         alunoRepository.save(new Aluno(
                 "Maria Clara Souza",
+                "MARIA CLARA SOUZA",
                 "maria@email.com",
                 "11122233344",
                 "11122233344",
@@ -62,6 +65,7 @@ public class DataLoader implements CommandLineRunner {
 
         alunoRepository.save(new Aluno(
                 "Lucas Henrique Alves",
+                "LUCAS HENRIQUE ALVES",
                 "lucas@email.com",
                 "55566677788",
                 "55566677788",
@@ -75,6 +79,7 @@ public class DataLoader implements CommandLineRunner {
 
         alunoRepository.save(new Aluno(
                 "Ana Beatriz Lima",
+                "ANA BEATRIZ LIMA",
                 "ana@email.com",
                 "22233344455",
                 "22233344455",

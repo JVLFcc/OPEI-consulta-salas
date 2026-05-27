@@ -52,8 +52,11 @@ public class CsvImportService {
             for (CSVRecord record : csvParser) {
                 registrosLidos++;
 
+                String nomeCompleto = lerCampo(record, "Nome");
+
                 Aluno aluno = new Aluno(
-                        lerCampo(record, "Nome"),
+                        nomeCompleto,
+                        normalizarTexto(nomeCompleto),
                         lerCampo(record, "Email"),
                         lerCampo(record, "CPF"),
                         normalizarCpf(lerCampo(record, "CPF")),
@@ -124,6 +127,23 @@ public class CsvImportService {
         }
 
         return apenasNumeros;
+    }
+
+    /**
+     * normaliza texto pra busca
+     *
+     * permite encontrar nomes com ou sem acento
+     * (tinha esquecido de descomentar)
+     */
+    private String normalizarTexto(String texto) {
+        if (texto == null) {
+            return null;
+        }
+
+        return java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .trim()
+                .toUpperCase();
     }
 
     /**

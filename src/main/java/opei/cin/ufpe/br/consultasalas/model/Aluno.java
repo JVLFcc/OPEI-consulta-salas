@@ -18,6 +18,7 @@ public class Aluno {
 
      // nome completo que é usado na parte de requisição/busca por nome
     private String nomeCompleto;
+    private String nomeNormalizado;
 
     // email do aluno que pode até ter no banco, mas não vai ser exibido no site
     private String email;
@@ -51,8 +52,9 @@ public class Aluno {
     public Aluno() {
     }
 
-    public Aluno(String nomeCompleto,String email, String cpf, String cpfNormalizado, String dataNascimento, String instituicao, String modalidade, String handle, String polo, String sala){
+    public Aluno(String nomeCompleto,String nomeNormalizado, String email, String cpf, String cpfNormalizado, String dataNascimento, String instituicao, String modalidade, String handle, String polo, String sala){
         this.nomeCompleto = nomeCompleto;
+        this.nomeNormalizado = nomeNormalizado;
         this.email = email;
         this.cpf = cpf;
         this.cpfNormalizado = cpfNormalizado;
@@ -70,6 +72,10 @@ public class Aluno {
 
     public String getNomeCompleto() {
         return nomeCompleto;
+    }
+
+    public String getNomeNormalizado() {
+        return nomeNormalizado;
     }
 
     public String getEmail() {
@@ -114,6 +120,10 @@ public class Aluno {
 
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
+    }
+
+    public void setNomeNormalizado(String nomeNormalizado) {
+        this.nomeNormalizado = nomeNormalizado;
     }
 
     public void setEmail(String email) {

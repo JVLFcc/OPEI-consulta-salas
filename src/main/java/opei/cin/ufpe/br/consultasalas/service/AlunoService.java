@@ -47,7 +47,7 @@ public class AlunoService {
         if (pareceCpf(termoLimpo, apenasNumeros)) {
             alunos = alunoRepository.findTop20ByCpfNormalizadoContaining(apenasNumeros);
         } else {
-            alunos = alunoRepository.findTop20ByNomeCompletoContainingIgnoreCase(termoLimpo);
+            alunos = alunoRepository.findTop20ByNomeNormalizadoContaining(normalizarTexto(termoLimpo));
         }
 
         /**
@@ -191,5 +191,17 @@ public class AlunoService {
         }
 
         return valor.trim().toUpperCase();
+    }
+
+    // tem o mesmo intuito do método que foi aplicado no CsvImportService
+    private String normalizarTexto(String texto) {
+        if (texto == null) {
+            return null;
+        }
+
+        return java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .trim()
+                .toUpperCase();
     }
 }

@@ -16,7 +16,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long>{
      * busca alunos pelo nome e é isso
      * usa top20 agora pra n quebrar, e pq depois o service vai remover duplicatas por CPF
      */
-    List<Aluno> findTop20ByNomeCompletoContainingIgnoreCase(String nome);
+    List<Aluno> findTop20ByNomeNormalizadoContaining(String nomeNormalizado);
 
     /**
      * busca alunos pelo cpf normalizado e é isso
