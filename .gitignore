@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Real allocation data - sensitive information
+src/main/resources/data/*.csv
+src/main/resources/data/*.xlsx
+
+# Allow safe sample file
+!src/main/resources/data/exampleAlocacoesCsv.csv
