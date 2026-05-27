@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/alunos")
 @CrossOrigin(origins = {
         "http://localhost:5173",
-        "https://SEU-FRONTEND.vercel.app"
+        "https://opei-consulta-salas.vercel.app/"
 })
 public class AlunoController {
 
