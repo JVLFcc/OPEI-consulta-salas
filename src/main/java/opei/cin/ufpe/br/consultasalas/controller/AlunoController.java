@@ -15,7 +15,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/alunos")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://SEU-FRONTEND.vercel.app"
+})
 public class AlunoController {
 
     private final AlunoService alunoService;

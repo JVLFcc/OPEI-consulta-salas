@@ -2,7 +2,8 @@ import { useState } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import "./App.css";
 
-const API_URL = "http://localhost:8080/api/alunos";
+//! url base da api vai ser chamada a partir de uma var de ambiente pra facilitar a configuração em diferentes ambientes
+const API_URL = `${import.meta.env.VITE_API_URL}/api/alunos`;
 
 function App() {
   const [termo, setTermo] = useState("");
