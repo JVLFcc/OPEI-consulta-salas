@@ -36,7 +36,7 @@ svg {
 body {
   margin: 0;
   font-family: "Sora", Arial, Helvetica, sans-serif;
-  background: var(--white);
+  background: var(--linen);
   color: var(--text);
 }
 
@@ -59,7 +59,7 @@ input {
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
-  padding: 42px 18px 72px;
+  padding: 42px 18px 56px;
   flex: 1;
   position: relative;
   z-index: 1;
@@ -399,15 +399,15 @@ input {
   font-size: 14px;
 }
 
+.details > div:only-child {
+  grid-column: 1 / -1;
+}
+
 .footer {
   width: 100%;
   background: #212121;
   color: #ffffff;
-  padding: 28px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
+  padding: 34px 18px;
   position: relative;
   z-index: 3;
 }
@@ -420,6 +420,36 @@ input {
 .footer span {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.72);
+}
+
+.footer-content {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.footer-column strong {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.footer-column span {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 @media (min-width: 460px) {
@@ -455,5 +485,111 @@ input {
   .page::after {
     right: 0;
     transform: scaleX(-1);
+  }
+}
+
+.allocations-list {
+  margin-top: 18px;
+  display: grid;
+  gap: 16px;
+}
+
+.allocation-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.allocation-card + .allocation-card {
+  margin-top: 4px;
+}
+
+.allocation-header {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.allocation-header span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.allocation-header strong {
+  display: block;
+  margin-top: 4px;
+  color: #545454;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.student-school {
+  margin-top: 6px;
+  color: #666666;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.realization-section {
+  width: 100%;
+  background: transparent;
+  padding: 42px 18px 38px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.realization-section h2 {
+  margin: 0 0 28px;
+  color: #212121;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.realization-logos {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: center;
+  justify-items: center;
+}
+
+.realization-logo {
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.pet-logo {
+  max-width: 280px;
+}
+
+.cin-logo {
+  max-width: 260px;
+}
+
+.ufpe-logo {
+  max-width: 260px;
+}
+
+@media (min-width: 760px) {
+  .realization-section {
+    padding: 50px 32px 46px;
+  }
+
+  .realization-logos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .realization-section h2 {
+    font-size: 28px;
   }
 }
