@@ -1,5 +1,6 @@
 package opei.cin.ufpe.br.consultasalas.service;
 
+import opei.cin.ufpe.br.consultasalas.dto.AlocacaoResponse;
 import opei.cin.ufpe.br.consultasalas.dto.AlunoResponseDetalhada;
 import opei.cin.ufpe.br.consultasalas.dto.AlunoSugestaoResponse;
 import opei.cin.ufpe.br.consultasalas.dto.LocalizacaoDTO;
@@ -8,6 +9,8 @@ import opei.cin.ufpe.br.consultasalas.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * serviço principal da aplicação onde contém as regras relacionadas à busca dos alunos, exibição das sugestões e montagem do card final com detalhes
@@ -24,10 +27,12 @@ public class AlunoService {
     }
 
     /**
-     * busca sugestões com base num termo digitado
+     * busca sugestões com base no termo digitado
      *
      * a busca começa com pelo menos 3 caracteres pra evitar gargalo e requisições desnecessárias
      * se o termo possui apenas numeros, o sistema busca por cpf, caso o contrário busca por nome
+     *
+     * aqui removemos duplicatas pelo CPF antes de retornar
      */
     public List<AlunoSugestaoResponse> buscarSugestoes(String termo) {
         if (termo == null || termo.trim().length() < 3){
@@ -40,39 +45,76 @@ public class AlunoService {
         List<Aluno> alunos;
 
         if (termoLimpo.matches("\\d+")) {
-            alunos = alunoRepository.findTop10ByCpfNormalizadoContaining(apenasNumeros);
+            alunos = alunoRepository.findTop20ByCpfNormalizadoContaining(apenasNumeros);
         } else {
-            alunos = alunoRepository.findTop10ByNomeCompletoContainingIgnoreCase(termoLimpo);
+            alunos = alunoRepository.findTop20ByNomeCompletoContainingIgnoreCase(termoLimpo);
         }
 
         /**
          * a resposta da sugestão não traz todos os dados do aluno
-         * ela retorna apenas o necessário para o aluno se identificar: Id, nome completo e cpf mascarado
+         * ela retorna apenas o necessário para o aluno se identificar: Id, nome completo, cpf mascarado e data de nascimento
          */
-        return alunos.stream().map(aluno -> new AlunoSugestaoResponse(aluno.getId(), aluno.getNomeCompleto(), mascararCpf(aluno.getCpfNormalizado()))).toList();
+        return removerDuplicatasPorCpf(alunos).stream().map(aluno -> new AlunoSugestaoResponse(aluno.getId(), aluno.getNomeCompleto(), mascararCpf(aluno.getCpfNormalizado()), aluno.getDataNascimento())).toList();
+
     }
 
     /**
      * já aqui nós buscamos os detalhes completos de um aluno específico
-     * esse método vai ser chamado depois de um aluno clicar em uma sugestão, pq só assim o sistema vai montar o card final
-     * card final: sala, bloco, andar, modalidade, polo e outras informações de apoio
+     *
+     * a partir do ID selecionado na sugestão, vai ser encontrado o cpf do aluno aí sim buscamos todas as alocações vinculadas a esse cpf
      */
     public AlunoResponseDetalhada buscarDetalhes(Long id){
-        Aluno aluno = alunoRepository.findById(id).orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+        Aluno alunoBase = alunoRepository.findById(id).orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
-        LocalizacaoDTO localizacao = localizacaoService.resolverLocalizacao(aluno.getSala());
+        List<Aluno> alocacoesDoAluno = alunoRepository.findByCpfNormalizado(alunoBase.getCpfNormalizado());
+
+        List<AlocacaoResponse> alocacoes = alocacoesDoAluno.stream().map(aluno -> {
+            LocalizacaoDTO localizacao = localizacaoService.resolverLocalizacao(
+                    aluno.getPolo(),
+                    aluno.getSala(),
+                    aluno.getModalidade()
+            );
+
+            return new AlocacaoResponse(
+                    aluno.getModalidade(),
+                    aluno.getPolo(),
+                    aluno.getHandle(),
+                    localizacao.salaFormatada(),
+                    localizacao.bloco(),
+                    localizacao.andar()
+            );
+
+        }).toList();
 
         return new AlunoResponseDetalhada(
-                aluno.getId(),
-                aluno.getNomeCompleto(),
-                mascararCpf(aluno.getCpfNormalizado()),
-                aluno.getModalidade(),
-                aluno.getPolo(),
-                aluno.getHandle(),
-                aluno.getSala(),
-                localizacao.bloco(),
-                localizacao.andar()
+                alunoBase.getId(),
+                alunoBase.getNomeCompleto(),
+                mascararCpf(alunoBase.getCpfNormalizado()),
+                alunoBase.getDataNascimento(),
+                alunoBase.getInstituicao(),
+                alocacoes
         );
+    }
+
+    /**
+     * remove alunos duplicados pelo cpf
+     *
+     * isso vai evitar que um aluno inscrito em duas modalidades apareça duas vezes no autocomplete
+     */
+    private List<Aluno> removerDuplicatasPorCpf(List<Aluno> alunos) {
+        Map<String, Aluno> alunosPorCpf = new LinkedHashMap<>();
+
+        for (Aluno aluno : alunos) {
+            String chave = aluno.getCpfNormalizado();
+
+            if (chave == null || chave.isBlank()) {
+                chave = "ID_" + aluno.getId();
+            }
+
+            alunosPorCpf.putIfAbsent(chave, aluno);
+        }
+
+        return alunosPorCpf.values().stream().toList();
     }
 
     /**
@@ -82,7 +124,7 @@ public class AlunoService {
      * isso ajuda a diferenciar homônimos sem expor o cpf completo (LGPD ajudando aó olha só)
      */
     private String mascararCpf(String cpf) {
-        if (cpf == null || cpf.length() < 5) {
+        if (cpf == null) {
             return "***";
         }
 
