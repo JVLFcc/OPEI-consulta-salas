@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * controller responsável por expor os endpoints da API alunos
+ * controller responsável por expor os endpoints de consulta dos alunos
  *
  * essa é a camada que recebe as requisições HTTP vindas do frontend (acho que vou fazer em react)
  * repassa para o AlunoService
@@ -30,7 +30,7 @@ public class AlunoController {
         return alunoService.buscarSugestoes(q);
     }
 
-    // endpoint dos detalhes de um aluno específico
+    // endpoint dos detalhes de um aluno específico para o card final
     @GetMapping("/{id}")
     public AlunoResponseDetalhada buscarDetalhes(@PathVariable Long id) {
         return alunoService.buscarDetalhes(id);
