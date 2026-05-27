@@ -5,6 +5,41 @@ import "./App.css";
 //! url base da api vai ser chamada a partir de uma var de ambiente pra facilitar a configuração em diferentes ambientes
 const API_URL = `${import.meta.env.VITE_API_URL}/api/alunos`;
 
+// funções auxiliares para essa versão inicial, podem ser retiradas após opei pq vou ter que dar uma melhorada no back
+function normalizarTexto(texto) {
+  if (!texto) {
+    return "";
+  }
+
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toUpperCase();
+}
+
+function detalharPolo(polo) {
+  const poloNormalizado = normalizarTexto(polo);
+
+  if (poloNormalizado.includes("RECIFE")) {
+    return "Recife - Centro de Informática UFPE";
+  }
+
+  if (poloNormalizado.includes("CARUARU")) {
+    return "Caruaru - Colégio Diocesano de Caruaru";
+  }
+
+  if (poloNormalizado.includes("PALMARES")) {
+    return "Palmares - IFPE Campus Palmares";
+  }
+
+  if (poloNormalizado.includes("PETROLINA")) {
+    return "Petrolina - Colégio GGE Petrolina";
+  }
+
+  return polo || "Não informado";
+}
+
 function App() {
   const [termo, setTermo] = useState("");
   const [sugestoes, setSugestoes] = useState([]);
@@ -158,9 +193,9 @@ function App() {
                 ` . Nasc.: ${alunoSelecionado.dataNascimento}`}
                 </p>
 
-                {alunoSelecionado.instituicao && (
+                {/* {alunoSelecionado.instituicao && (
                   <p className="student-school">{alunoSelecionado.instituicao}</p>
-                )}
+                )} */}
             </div>
 
             <div className="allocations-list">
@@ -190,7 +225,7 @@ function App() {
             <div className="details">
               <div>
                 <span>Polo</span>
-                <strong>{alocacao.polo}</strong>
+                <strong>{detalharPolo(alocacao.polo)}</strong>
               </div>
 
               {alocacao.handle && (
