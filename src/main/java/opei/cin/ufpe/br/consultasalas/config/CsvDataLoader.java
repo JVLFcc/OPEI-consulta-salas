@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * carrega os dados reais da planilha de alocações a partir do CSV
@@ -23,15 +24,29 @@ public class CsvDataLoader implements CommandLineRunner{
 
     private final AlunoRepository alunoRepository;
 
+    @Value("${app.import.csv.enabled:false}")
+    private boolean importCsvEnabled;
+
     public CsvDataLoader(AlunoRepository alunoRepository) {
         this.alunoRepository = alunoRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        alunoRepository.deleteAll();
+
+        if (!importCsvEnabled) {
+            System.out.println("Importação automática de CSV desativada.");
+            return;
+        }
 
         ClassPathResource resource = new ClassPathResource("data/alocacoesAlunos.csv");
+
+        if (!resource.exists()) {
+            System.out.println("Arquivo CSV não encontrado. Importação ignorada.");
+            return;
+        }
+
+        alunoRepository.deleteAll();
 
         try (
              Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
