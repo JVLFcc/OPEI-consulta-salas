@@ -36,7 +36,12 @@ public class CsvImportService {
     public ResultadoImportacaoResponse importar(InputStream inputStream) throws Exception {
 
         List<Aluno> alunos = new ArrayList<>();
+
+        // tive que fazer isso pq vi alguns alunos repetidos na planilha, e essa vai ser a forma para tratar de erros de duplicação
+        java.util.Set<String> chavesJaImportadas = new java.util.HashSet<>();
+
         int registrosLidos = 0;
+        int duplicatasIgnoradas = 0;
 
         try (
                 Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -60,6 +65,15 @@ public class CsvImportService {
                         lerCampo(record, "Sala")
                 );
 
+                String chaveAlocacao = gerarChaveAlocacao(aluno);
+
+                if (chavesJaImportadas.contains(chaveAlocacao)) {
+                    duplicatasIgnoradas++;
+
+                    continue;
+                }
+
+                chavesJaImportadas.add(chaveAlocacao);
                 alunos.add(aluno);
             }
         }
@@ -69,7 +83,7 @@ public class CsvImportService {
         return new ResultadoImportacaoResponse(
                 registrosLidos,
                 alunos.size(),
-                "Importação concluída com sucesso!"
+                "Importação concluída com sucesso! Duplicatas ignoradas: " + duplicatasIgnoradas + "."
         );
     }
 
@@ -132,5 +146,31 @@ public class CsvImportService {
         }
 
         return dataLimpa;
+    }
+
+    /**
+     * gera  chave única para identificar uma alocação, pq de vez em quando surgem erros (e eu prefiro tratar aqui doq na planilha)
+     *
+     * portannto, se duas linhas tiverem o mesmo cpf, modalidade, polo, sala e handle, é connsiderada uma duplicata
+     */
+    private String gerarChaveAlocacao(Aluno aluno) {
+        return normalizarParaChave(aluno.getCpfNormalizado()) + "|" +
+                normalizarParaChave(aluno.getModalidade()) + "|" +
+                normalizarParaChave(aluno.getPolo()) + "|" +
+                normalizarParaChave(aluno.getSala()) + "|" +
+                normalizarParaChave(aluno.getHandle());
+    }
+
+    /**
+     * normaliza valores pra comparação interna
+     *
+     * isso vai evitar que diferenças pequenas, como espaço extra ou letra maiúscula e tals, faça com que o sistema pese que duas linhas iguais são diferentes rs
+     */
+    private String normalizarParaChave(String valor) {
+        if (valor == null) {
+            return "";
+        }
+
+        return valor.trim().toUpperCase();
     }
 }

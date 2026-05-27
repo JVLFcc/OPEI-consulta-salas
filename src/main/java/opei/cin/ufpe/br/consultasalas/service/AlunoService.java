@@ -68,7 +68,19 @@ public class AlunoService {
 
         List<Aluno> alocacoesDoAluno = alunoRepository.findByCpfNormalizado(alunoBase.getCpfNormalizado());
 
-        List<AlocacaoResponse> alocacoes = alocacoesDoAluno.stream().map(aluno -> {
+        java.util.Set<String> chavesAlocacoes = new java.util.HashSet<>();
+
+        List<AlocacaoResponse> alocacoes = alocacoesDoAluno.stream()
+                .filter(aluno -> { // tive que fazer isso por causa das duplicatas, é feio mas funciona
+                    String chave = gerarChaveAlocacao(aluno);
+
+                    if (chavesAlocacoes.contains(chave)) {
+                        return false;
+                    }
+
+                    chavesAlocacoes.add(chave);
+                    return true;
+                }).map(aluno -> {
             LocalizacaoDTO localizacao = localizacaoService.resolverLocalizacao(
                     aluno.getPolo(),
                     aluno.getSala(),
@@ -138,5 +150,33 @@ public class AlunoService {
         String doisUltimos = cpfLimpo.substring(cpfLimpo.length() - 2);
 
         return tresPrimeiros + ".***.***-" + doisUltimos;
+    }
+
+    /**
+     * gera chave única para identificar uma alocação do aluno
+     *
+     * a diferença desses métodos para os que estão no CsvImportService é que lá é pra evitar salvar duplicatas, e aqui é pra evitar exibir duplicatas
+     * ou seja, essa parte aqui é mais pra uma camada de proteção
+     *
+     * além de que aqui a chave ão inclui o cpf pq lá em cima já teve a busca
+     */
+    private String gerarChaveAlocacao(Aluno aluno) {
+        return normalizarParaChave(aluno.getModalidade()) + "|" +
+                normalizarParaChave(aluno.getPolo()) + "|" +
+                normalizarParaChave(aluno.getSala()) + "|" +
+                normalizarParaChave(aluno.getHandle());
+    }
+
+    /**
+     * normaliza texto pra comparação interna
+     *
+     * consistência rs
+     */
+    private String normalizarParaChave(String valor) {
+        if (valor == null) {
+            return "";
+        }
+
+        return valor.trim().toUpperCase();
     }
 }
